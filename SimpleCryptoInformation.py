@@ -1,9 +1,13 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-api_url_server_time = 'https://indodax.com/api/server_time'
-api_url_pairs = 'https://indodax.com/api/pairs'
-api_url_price = 'https://indodax.com/api/ticker/'
+load_dotenv()
+
+api_url_server_time = os.getenv("api_url_server_time")
+api_url_pairs = os.getenv("api_url_pairs")
+api_url_price = os.getenv('api_url_price')
 
 def generatePrice(api):
     try:
