@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -17,27 +18,17 @@ def generatePrice(api):
         if 'error' not in data:
             buy_val = data['ticker']['buy']
             sell_val = data['ticker']['sell']
+            time_stamp = data['ticker']['server_time']
+            time_stamp_sec = time_stamp / 1000
+            format_time_stamp_sec = datetime.fromtimestamp(time_stamp_sec)
+            formatted_time = format_time_stamp_sec.strftime("%H:%M:%S")
+
             print(f"Buy is for {buy_val}")
             print(f"Sell is for {sell_val}")
+            print(f"This data is generated on {format_time_stamp_sec}")
         else:
             print("Pair not exist")
     except Exception as e:
         print(e)
 
 generatePrice(api_url_price)
-
-def generateInfo(api):
-    response = requests.get(api)
-    if response.status_code == 200:
-        data = response.json()
-        with open(file_name, 'w') as file:
-            try:
-                for response_val in data:
-                    cr_symbol = response_val['symbol']
-                    cr_desc = response_val['description']
-                    file.write(f"{cr_symbol} {cr_desc}\n")
-            except Exception as e:
-                print(e)
-        print("done")
-    else:
-        print(f"Error {response.status_code} - {response.text}")
